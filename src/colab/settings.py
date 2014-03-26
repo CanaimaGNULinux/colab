@@ -82,4 +82,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
+from os import sys
 from custom_settings import *
+if 'test' in sys.argv:
+    DATABASES['default'] = {'ENGINE': 'django.db.backends.sqlite3'}
+    DATABASES['trac'] = {'ENGINE': 'django.db.backends.sqlite3'}
+
+SOUTH_TESTS_MIGRATE=False
+

@@ -6,7 +6,10 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from haystack.forms import SearchForm
-from haystack.inputs import Raw
+if settings.HAYSTACK_CONNECTIONS['default']['ENGINE'] == 'haystack.backends.whoosh_backend.WhooshEngine':
+    from haystack.inputs import Raw
+else:
+    from haystack.inputs import AltParser
 
 from accounts.models import User
 from super_archives.models import Message, MailingList
@@ -105,8 +108,10 @@ class ColabSearchForm(SearchForm):
                 # Date boosting: http://wiki.apache.org/solr/FunctionQuery#Date_Boosting
                 'bf': 'recip(ms(NOW/HOUR,modified),3.16e-11,1,1)^10',
             }
-
-            sqs = sqs.filter(content=q)
+            if settings.HAYSTACK_CONNECTIONS['default']['ENGINE'] == 'haystack.backends.whoosh_backend.WhooshEngine' :
+                sqs = sqs.filter(content=q)
+            else:
+                sqs = sqs.filter(content=AltParser('edismax', q, **dismax_opts))
 
         if self.cleaned_data['type']:
             sqs = sqs.filter(type=self.cleaned_data['type'])

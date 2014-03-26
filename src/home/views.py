@@ -3,6 +3,7 @@ from collections import OrderedDict
 
 from django.shortcuts import render
 from django.utils import timezone
+from django.conf import settings
 
 from search.utils import trans
 from haystack.query import SearchQuerySet
@@ -29,8 +30,11 @@ def index(request):
         'hottest_threads': hottest_threads[:6],
         'latest_threads': latest_threads,
         'type_count': count_types,
-        'latest_results': SearchQuerySet().all().order_by(
-            '-modified', 
-        )[:6],
     }
+    if settings.HAYSTACK_CONNECTIONS['default']['ENGINE'] == 'haystack.backends.whoosh_backend.WhooshEngine':
+        context['latest_results']= SearchQuerySet().all().order_by('-modified', )[:6]
+    else:
+        context['latest_results']= SearchQuerySet().all().order_by('-modified', '-created')[:6] 
+
+
     return render(request, 'home.html', context)
