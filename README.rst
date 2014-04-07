@@ -163,3 +163,9 @@ For the next deploy you can just run ``fab deploy`` and in case your
 ``requirements.txt`` changes ``fab deploy:update``.
 
 The deployed code will be accessible on ``http://localhost:8080``.
+
+
+.. image:: https://d2weczhvl823v0.cloudfront.net/CanaimaGNULinux/colab/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+

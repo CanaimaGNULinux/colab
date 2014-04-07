@@ -65,7 +65,8 @@ HAYSTACK_CUSTOM_HIGHLIGHTER = 'colab.utils.highlighting.ColabHighlighter'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH':'whoosh/'
+        'PATH':'whoosh/',
+        'EXCLUDED_INDEXES':['proxy.search_indexes.WikiIndex'],
     }
 }
 
